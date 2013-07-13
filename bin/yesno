@@ -1,0 +1,64 @@
+#! /bin/sh
+#
+# Module: yesno
+#
+# **** License ****
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# A copy of the GNU General Public License is available as
+# `/usr/share/common-licenses/GPL' in the Debian GNU/Linux distribution
+# or on the World Wide Web at `http://www.gnu.org/copyleft/gpl.html'.
+# You can also obtain it by writing to the Free Software Foundation,
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+# MA 02110-1301, USA.
+#
+# Copyright (C) 2013 SO3 Group
+#
+# This code was originally developed by Vyatta, Inc.
+# Portions created by Vyatta are Copyright (C) 2010 Vyatta, Inc.
+# All Rights Reserved.
+#
+# Author: Stephen Hemminger
+# Description: yes or no question script
+#
+# **** End License ****
+
+default=
+if [ "$1" = "-y" ]; then
+    default='y'
+    shift
+elif [ "$1" = "-n" ]; then
+    default='n'
+    shift
+fi
+
+if [ $# -eq 0 ]; then
+    prompt="yes or no: "
+else
+    prompt="$*"
+fi
+
+while true; do
+    read -p "$prompt" || exit 1
+    if [ -z "$REPLY" -a ! -z "$default" ];then
+        REPLY=$default
+    fi
+    case "$REPLY" in
+        y*|Y*)
+            exit 0
+            ;;
+        n*|n*)
+            exit 1
+            ;;
+        *)
+            echo "Answer yes or no please"
+            ;;
+    esac
+done

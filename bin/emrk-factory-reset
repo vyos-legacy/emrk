@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+# emrk-factory-reset: removes and optionally backups
+#    config boot which reset the router to defaults
+#
+# Maintainer: Daniil Baturin <daniil at baturin dot org>
+#
+# Copyright (C) 2013 SO3Group
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+
+ROOT_MNT_DIR=/mnt/root
+CONFIG=/config/config.boot
+
+echo "This script will remove your boot config"
+echo "so next time the system boots it will boot"
+echo "with factory default one"
+echo
+echo "Do you want to continue?"
+yesno
+
+if [ $? != 0 ]; then
+    exit 0
+fi
+
+if [ ! -f $ROOT_MNT_DIR/$CONFIG ]; then
+    echo "Config file not found!"
+    exit 1
+fi
+
+echo "Do you want to make a backup copy of your config?"
+yesno
+
+if [ $? == 0 ]; then
+    cp $ROOT_MNT_DIR/$CONFIG $ROOT_MNT_DIR/config.boot.emrk-backup
+    echo "Saved a backup copy to /config/config.boot.emrk-backup"  
+fi
+
+rm -f $ROOT_MNT_DIR/$CONFIG
+
+echo "Factory reset finished, you may reboot the router"

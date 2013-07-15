@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# emrk-remove-user-data: removes and re-creates writable directory
+#
+# Maintainer: Daniil Baturin <daniil at baturin dot org>
+#
+# Copyright (C) 2013 SO3Group
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+
+YESNO=/bin/yesno
+
+ROOT_MNT_DIR=/mnt/root
+
+echo "WARNING: this script will purge all the data"
+echo "in user-writable directories!"
+echo "All your configuration, user installed packages"
+echo "and anything else you had apart from the default"
+echo "EdgeOS files will be irrecoverably destroyed"
+echo "Do you want to continue?"
+
+$YESNO
+
+if [ $? == 1 ]; then
+    exit 0
+fi
+
+# Why w* ?
+# Because when you press the reset button, your old data
+# is not removed. The old w/ dir is renamed to w${random string}/
+# and the new one is created
+# In most cases it's ok, but if you are going e.g. to sell
+# the router on ebay or otherwise give it away to untrusted
+# third party, transfer of config date and encryption key
+# is a very bad idea
+find $ROOT_MNT_DIR -name w* -print  | xargs /bin/rm -rf
+
+mkdir $ROOT_MNT_DIR/w

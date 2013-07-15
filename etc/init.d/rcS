@@ -25,7 +25,7 @@
 # Value is chosen rather arbitrary
 sleep 10
 echo
-echo "Loading EMRK"
+echo "Loading EMRK 0.9a"
 
 echo "Mounting filesystems"
 mount -a
@@ -71,7 +71,6 @@ fi
 
 if [ $BOOT_OK == 1 ]; then
     echo "Attempting to mount boot partition"
-    mkdir $BOOT_MNT_DIR
     mount -t vfat /dev/sda1 $BOOT_MNT_DIR
     if [ $? == 0 ]; then
         BOOT_MOUNT_OK=1
@@ -123,7 +122,6 @@ fi
 
 if [ $ROOT_OK == 1 ]; then
     echo "Attempting to mount root partition"
-    mkdir $ROOT_MNT_DIR
     mount -t ext3 /dev/sda2 $ROOT_MNT_DIR
     if [ $? == 0 ]; then
         ROOT_MOUNT_OK=1
@@ -200,6 +198,7 @@ fi
 
 # Configure network
 DHCP_OK=0
+NET_OK=0
 
 echo
 echo "Do you want to configure network via DHCP?"
@@ -208,6 +207,7 @@ if [ $? == 0 ]; then
     /sbin/udhcpc
     if [ $? == 0 ]; then
         DHCP_OK=1
+        NET_OK=1
     else
         echo "DHCP configuration attemp failes!"
     fi
@@ -257,20 +257,23 @@ if [ $DHCP_OK != 1 ]; then
             fi
         done
     fi
+
+    NET_OK=1
 fi
 
+echo
 echo "EMRK provides some scripts for automated"
 echo "recovery procedures:"
 echo
 echo "emrk-factory-reset -- reset config to factory default"
-echo "emrk-delete-data -- remove all the user data including"
+echo "emrk-remove-user-data -- remove all the user data including"
 echo "    config and everything"
 echo "emrk-reinstall -- reinstall EdgeOS from scratch"
-echo "    (will wipe any user data too)"
-echo "emrk-backup-config -- backup config directory"
-echo "    remote host"
-echo "emrk-config-restore -- restore config directory"
-echo "    contents from a downloaded archive"
+echo "    (wipes any user data too)"
+#echo "emrk-backup-config -- backup config directory"
+#echo "    remote host"
+#echo "emrk-config-restore -- restore config directory"
+#echo "    contents from a downloaded archive"
 echo
 echo "Enter 'reboot' to reboot your router"
 

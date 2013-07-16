@@ -36,12 +36,14 @@ KERNEL_ORIG=vmlinux.tmp
 KERNEL_ORIG_MD5=vmlinux.tmp.md5
 SQUASHFS_ORIG=squashfs.tmp
 SQUASHFS_MD5_ORIG=squashfs.tmp.md5
+VERSION_ORIG=version.tmp
 
 # Target file names
 KERNEL=vmlinux.64
 KERNEL_MD5=vmlinux.64.md5
 SQUASHFS=squashfs.img
 SQUASHFS_MD5=squashfs.img.md5
+VERSION=version
 
 PARTED=/sbin/parted
 YESNO=/bin/yesno
@@ -132,6 +134,9 @@ fi
 echo "Copying EdgeOS system image to root partition"
 mv $TMP_DIR/$SQUASHFS_ORIG $ROOT_MNT_DIR/$SQUASHFS
 mv $TMP_DIR/$SQUASHFS_MD5_ORIG $ROOT_MNT_DIR/$SQUASHFS_MD5
+
+echo "Copying version file to the root partition"
+mv $TMP_DIR/$VERSION_ORIG $ROOT_MNT_DIR/$VERSION
 
 # Writable data dir
 echo "Creating EdgeOS writable data directory"

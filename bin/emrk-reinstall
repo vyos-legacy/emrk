@@ -97,7 +97,7 @@ echo "Formatting root partition"
 mkfs.ext3 -q $ROOT
 
 ## Mount partitions
-echo "Mounting boot parition"
+echo "Mounting boot partition"
 mount -t vfat $BOOT $BOOT_MNT_DIR
 
 echo "Mounting root partition"

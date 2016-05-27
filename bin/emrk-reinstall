@@ -83,14 +83,16 @@ echo "Formatting boot partition"
 mkfs.vfat $BOOT
 
 # Root
-echo "Creating root partition"
 echo "Use full USB Drive capacity?"
 $YESNO
+
 if [ $? == 0 ]; then
     # Use full capacity
+    echo "Creating root partition - Full capacity"
     $PARTED --script $DEV mkpart primary ext3 150MB -1s
 else
     # Use only 1900MB for ROOT partion
+    echo "Creating root partition - 2GB default"
     $PARTED --script $DEV mkpart primary ext3 150MB 1900MB
 fi
 echo "Formatting root partition"

@@ -88,11 +88,12 @@ $YESNO
 
 if [ $? == 0 ]; then
     # Use full capacity
-    echo "Creating root partition - Full capacity"
-    $PARTED --script $DEV mkpart primary ext3 150MB -1s
+    echo "Creating root partition - using full capacity"
+    $PARTED --script $DEV mkpart primary ext3 150MB 100%
+    echo "Depending on the size of your drive, this step might take some time"
 else
     # Use only 1900MB for ROOT partion
-    echo "Creating root partition - 2GB default"
+    echo "Creating root partition - using 2GB default"
     $PARTED --script $DEV mkpart primary ext3 150MB 1900MB
 fi
 echo "Formatting root partition"

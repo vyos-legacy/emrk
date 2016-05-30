@@ -157,5 +157,10 @@ mkdir $ROOT_MNT_DIR/$W_DIR
 echo "Cleaning up"
 rm -rf $TMP_DIR
 
+## Waiting for disk sync.
+echo "Waiting for disk sync"
+sync
+
+# All done - let's reboot
 echo "Installation finished"
 echo "Please reboot your router"

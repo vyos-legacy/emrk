@@ -50,4 +50,9 @@ fi
 
 rm -f $ROOT_MNT_DIR/$CONFIG
 
+## Waiting for disk sync.
+echo "Waiting for disk sync"
+sync
+
+# All done - let's reboot
 echo "Factory reset finished, you may reboot the router"

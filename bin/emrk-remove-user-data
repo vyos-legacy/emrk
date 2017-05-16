@@ -48,3 +48,10 @@ fi
 find $ROOT_MNT_DIR -name w* -print  | xargs /bin/rm -rf
 
 mkdir $ROOT_MNT_DIR/w
+
+## Waiting for disk sync.
+echo "Waiting for disk sync"
+sync
+
+# All done - let's reboot
+echo "User data removed, you may reboot the router"

@@ -83,13 +83,24 @@ echo "Formatting boot partition"
 mkfs.vfat $BOOT
 
 # Root
-echo "Creating root partition"
-$PARTED --script $DEV mkpart primary ext3 150MB 1900MB
+echo "Use full USB Drive capacity?"
+$YESNO
+
+if [ $? == 0 ]; then
+    # Use full capacity
+    echo "Creating root partition - using full capacity"
+    $PARTED --script $DEV mkpart primary ext3 150MB 100%
+    echo "Depending on the size of your drive, this step might take some time"
+else
+    # Use only 1900MB for ROOT partion
+    echo "Creating root partition - using 2GB default"
+    $PARTED --script $DEV mkpart primary ext3 150MB 1900MB
+fi
 echo "Formatting root partition"
 mkfs.ext3 -q $ROOT
 
 ## Mount partitions
-echo "Mounting boot parition"
+echo "Mounting boot partition"
 mount -t vfat $BOOT $BOOT_MNT_DIR
 
 echo "Mounting root partition"
@@ -146,5 +157,10 @@ mkdir $ROOT_MNT_DIR/$W_DIR
 echo "Cleaning up"
 rm -rf $TMP_DIR
 
+## Waiting for disk sync.
+echo "Waiting for disk sync"
+sync
+
+# All done - let's reboot
 echo "Installation finished"
 echo "Please reboot your router"

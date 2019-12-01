@@ -55,7 +55,7 @@ echo "it will be irrecoverably destroyed!"
 echo "Do you want to continue?"
 $YESNO
 
-if [ $? == 1 ]; then
+if [ $? -eq 1 ]; then
     exit 0
 fi
 
@@ -69,6 +69,10 @@ if mount | grep $ROOT > /dev/null; then
     echo "Unmounting root partition"
     umount $ROOT
 fi
+
+# Create the mount points if they don't exist
+mkdir -p $BOOT_MNT_DIR
+mkdir -p $ROOT_MNT_DIR
 
 ## Repartition
 
@@ -86,7 +90,7 @@ mkfs.vfat $BOOT
 echo "Use full USB Drive capacity?"
 $YESNO
 
-if [ $? == 0 ]; then
+if [ $? -eq 0 ]; then
     # Use full capacity
     echo "Creating root partition - using full capacity"
     $PARTED --script $DEV mkpart primary ext3 150MB 100%
@@ -122,7 +126,7 @@ done
 
 # Unpack image
 echo "Unpacking EdgeOS release image"
-tar xf $TMP_DIR/edgeos.tar -C $TMP_DIR
+tar xf $TAR_PATH -C $TMP_DIR
 
 # The kernel
 echo "Verifying EdgeOS kernel"

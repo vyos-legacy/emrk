@@ -46,14 +46,14 @@ SQUASHFS_MD5=squashfs.img.md5
 VERSION=version
 
 PARTED=/sbin/parted
-YESNO=/bin/yesno
+YESNO="$(dirname "$0")"/yesno
 
 # Scary disclaimer
 echo "WARNING: This script will reinstall EdgeOS from scratch"
 echo "If you have any usable data on your router storage,"
 echo "it will be irrecoverably destroyed!"
 echo "Do you want to continue?"
-$YESNO
+"$YESNO"
 
 if [ $? -eq 1 ]; then
     exit 0
@@ -88,7 +88,7 @@ mkfs.vfat $BOOT
 
 # Root
 echo "Use full USB Drive capacity?"
-$YESNO
+"$YESNO"
 
 if [ $? -eq 0 ]; then
     # Use full capacity

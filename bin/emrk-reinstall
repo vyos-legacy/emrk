@@ -23,13 +23,14 @@
 # It's time to reinstall EdgeOS!
 # EdgeOS won't reinstall itself!
 
-DEV=/dev/sda
-BOOT=/dev/sda1
-ROOT=/dev/sda2
+DEV=$EMRK_DEV || /dev/sda
+BOOT=${DEV}1
+ROOT=${DEV}2
 BOOT_MNT_DIR=/mnt/boot
 ROOT_MNT_DIR=/mnt/root
 TMP_DIR=$ROOT_MNT_DIR/tmp
 W_DIR=w
+TAR_PATH=$EMRK_TAR_PATH
 
 # Release tarball file names
 KERNEL_ORIG=vmlinux.tmp
@@ -46,16 +47,16 @@ SQUASHFS_MD5=squashfs.img.md5
 VERSION=version
 
 PARTED=/sbin/parted
-YESNO=/bin/yesno
+YESNO="$(dirname "$0")"/yesno
 
 # Scary disclaimer
 echo "WARNING: This script will reinstall EdgeOS from scratch"
 echo "If you have any usable data on your router storage,"
 echo "it will be irrecoverably destroyed!"
 echo "Do you want to continue?"
-$YESNO
+"$YESNO"
 
-if [ $? == 1 ]; then
+if [ $? -eq 1 ]; then
     exit 0
 fi
 
@@ -69,6 +70,10 @@ if mount | grep $ROOT > /dev/null; then
     echo "Unmounting root partition"
     umount $ROOT
 fi
+
+# Create the mount points if they don't exist
+mkdir -p $BOOT_MNT_DIR
+mkdir -p $ROOT_MNT_DIR
 
 ## Repartition
 
@@ -84,9 +89,9 @@ mkfs.vfat $BOOT
 
 # Root
 echo "Use full USB Drive capacity?"
-$YESNO
+"$YESNO"
 
-if [ $? == 0 ]; then
+if [ $? -eq 0 ]; then
     # Use full capacity
     echo "Creating root partition - using full capacity"
     $PARTED --script $DEV mkpart primary ext3 150MB 100%
@@ -107,11 +112,12 @@ echo "Mounting root partition"
 mount -t ext3 $ROOT $ROOT_MNT_DIR
 
 ## Download image
-mkdir $ROOT_MNT_DIR/tmp
-while true; do
+mkdir -p $TMP_DIR
+while [ -z "$TAR_PATH" ]; do
     read -p "Enter EdgeOS image url: " URL
     curl -o $ROOT_MNT_DIR/tmp/edgeos.tar $URL
     if [ $? == 0 ]; then
+        TAR_PATH=$TMP_DIR/edgeos.tar
         break
     else
         echo "Could not download EdgeOS image, try again!"
@@ -122,7 +128,7 @@ done
 
 # Unpack image
 echo "Unpacking EdgeOS release image"
-tar xf $TMP_DIR/edgeos.tar -C $TMP_DIR
+tar xf $TAR_PATH -C $TMP_DIR
 
 # The kernel
 echo "Verifying EdgeOS kernel"

@@ -46,7 +46,7 @@ else
 fi
 
 while true; do
-    read -p "$prompt" || exit 1
+    read -p "$prompt" REPLY || exit 1
     if [ -z "$REPLY" -a ! -z "$default" ];then
         REPLY=$default
     fi

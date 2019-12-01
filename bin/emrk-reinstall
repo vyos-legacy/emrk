@@ -23,13 +23,14 @@
 # It's time to reinstall EdgeOS!
 # EdgeOS won't reinstall itself!
 
-DEV=/dev/sda
-BOOT=/dev/sda1
-ROOT=/dev/sda2
+DEV=$EMRK_DEV || /dev/sda
+BOOT=${DEV}1
+ROOT=${DEV}2
 BOOT_MNT_DIR=/mnt/boot
 ROOT_MNT_DIR=/mnt/root
 TMP_DIR=$ROOT_MNT_DIR/tmp
 W_DIR=w
+TAR_PATH=$EMRK_TAR_PATH
 
 # Release tarball file names
 KERNEL_ORIG=vmlinux.tmp

@@ -111,11 +111,12 @@ echo "Mounting root partition"
 mount -t ext3 $ROOT $ROOT_MNT_DIR
 
 ## Download image
-mkdir $ROOT_MNT_DIR/tmp
-while true; do
+mkdir -p $TMP_DIR
+while [ -z "$TAR_PATH" ]; do
     read -p "Enter EdgeOS image url: " URL
     curl -o $ROOT_MNT_DIR/tmp/edgeos.tar $URL
     if [ $? == 0 ]; then
+        TAR_PATH=$TMP_DIR/edgeos.tar
         break
     else
         echo "Could not download EdgeOS image, try again!"

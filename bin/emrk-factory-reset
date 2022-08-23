@@ -43,7 +43,7 @@ fi
 echo "Do you want to make a backup copy of your config?"
 yesno
 
-if [ $? == 0 ]; then
+if [ $? = 0 ]; then
     cp $ROOT_MNT_DIR/$CONFIG $ROOT_MNT_DIR/config.boot.emrk-backup
     echo "Saved a backup copy to /config/config.boot.emrk-backup"  
 fi

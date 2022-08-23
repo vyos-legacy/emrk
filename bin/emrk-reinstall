@@ -118,7 +118,7 @@ mkdir -p $TMP_DIR
 while [ -z "$TAR_PATH" ]; do
     read -p "Enter EdgeOS image url: " URL
     curl -o $ROOT_MNT_DIR/tmp/edgeos.tar $URL
-    if [ $? == 0 ]; then
+    if [ $? = 0 ]; then
         TAR_PATH=$TMP_DIR/edgeos.tar
         break
     else

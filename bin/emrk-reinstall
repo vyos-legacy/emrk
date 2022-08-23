@@ -20,6 +20,8 @@
 #
 #
 
+set -e
+
 # It's time to reinstall EdgeOS!
 # EdgeOS won't reinstall itself!
 

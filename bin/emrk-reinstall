@@ -20,10 +20,12 @@
 #
 #
 
+set -e
+
 # It's time to reinstall EdgeOS!
 # EdgeOS won't reinstall itself!
 
-DEV=$EMRK_DEV || /dev/sda
+DEV=${EMRK_DEV:-/dev/sda}
 BOOT=${DEV}1
 ROOT=${DEV}2
 BOOT_MNT_DIR=/mnt/boot
@@ -116,7 +118,7 @@ mkdir -p $TMP_DIR
 while [ -z "$TAR_PATH" ]; do
     read -p "Enter EdgeOS image url: " URL
     curl -o $ROOT_MNT_DIR/tmp/edgeos.tar $URL
-    if [ $? == 0 ]; then
+    if [ $? = 0 ]; then
         TAR_PATH=$TMP_DIR/edgeos.tar
         break
     else

@@ -33,7 +33,7 @@ echo "Do you want to continue?"
 
 $YESNO
 
-if [ $? == 1 ]; then
+if [ $? = 1 ]; then
     exit 0
 fi
 
